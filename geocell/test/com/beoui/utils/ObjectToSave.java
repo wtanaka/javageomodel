@@ -15,8 +15,11 @@ package com.beoui.utils;
 
 import java.util.List;
 
+import com.beoui.geocell.model.LocationCapable;
+import com.beoui.geocell.model.Point;
+
 //@PersistenceCapable
-public class ObjectToSave {
+public class ObjectToSave implements LocationCapable {
 
 //	@PrimaryKey
 //	@Persistent
@@ -61,5 +64,13 @@ public class ObjectToSave {
 
 	public void setGeocells(List<String> geocells) {
 		this.geocells = geocells;
+	}
+
+	public String getKeyString() {
+		return Long.valueOf(id).toString();
+	}
+
+	public Point getLocation() {
+		return new Point(latitude, longitude);
 	}
 }

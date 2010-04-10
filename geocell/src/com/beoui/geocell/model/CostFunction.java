@@ -11,23 +11,23 @@ implied. See the License for the specific language governing permissions
 and limitations under the License.
 */
 
-package com.beoui.utils;
+package com.beoui.geocell.model;
 
 /**
- * Default cost function used if no cost function is specified in Geocell.best_bbox_search_cells method.
+ * Interface to create a cost function used in geocells algorithm.
+ * This function will determine the cost of an operation depending of number of cells and resolution.
+ * When the cost is going higher, the algorithm stops.
+ * The cost depends on application use of geocells.
  * 
  * @author Alexandre Gellibert <alexandre.gellibert@gmail.com>
  *
  */
-public class DefaultCostFunction implements CostFunction {
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.beoui.utils.CostFunction#default_cost_function(int, int)
+public interface CostFunction {
+	/**
+	 * 
+	 * @param numCells number of cells found
+	 * @param resolution resolution of those cells
+	 * @return the cost of the operation
 	 */
-	@Override
-	public double default_cost_function(int numCells, int resolution) {
-		return numCells > Math.pow(Geocell.GEOCELL_GRID_SIZE, 2) ? Double.MAX_VALUE : 0;
-	}
-	
+	public double defaultCostFunction(int numCells, int resolution);
 }
