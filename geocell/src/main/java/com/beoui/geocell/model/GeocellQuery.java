@@ -1,63 +1,61 @@
 package com.beoui.geocell.model;
 
-import java.security.InvalidParameterException;
 import java.util.List;
 
 /**
- * GeocellQuery splits the traditional query in 3 parts: 
- * the base query string, 
- * the declared parameters 
+ * GeocellQuery splits the traditional query in 3 parts:
+ * the base query string,
+ * the declared parameters
  * and the list of object parameters.
- * 
+ *
  * Additional information on http://code.google.com/appengine/docs/java/datastore/queriesandindexes.html
- * 
+ *
  * This allows us to create new queries and adding conditions/filters like in the proximity fetch.
- * 
+ *
  * @author Alexandre Gellibert
  *
  */
 public class GeocellQuery {
-	
-	/**
-	 * Base query string without the declared parameters and without the entity name. Ex: "lastName == lastNameParam"
-	 * 
-	 * CAREFUL: must not contain "order" clauses!
-	 */
-	private String baseQuery;
-	
-	/**
-	 * (Optional)
-	 * Declared parameters. Ex: "String lastNameParam"
-	 */
-	private String declaredParameters;
-	
-	/**
-	 * (Optional)
-	 * List of parameters. Ex: Arrays.asList("Smith")
-	 */
-	private List<Object> parameters;
 
-	public GeocellQuery(String baseQuery, String declaredParameters,
-			List<Object> parameters) {
-		super();
-		if(baseQuery == null || baseQuery.length() == 0) {
-			throw new InvalidParameterException();
-		}
-		this.baseQuery = baseQuery;
-		this.declaredParameters = declaredParameters;
-		this.parameters = parameters;
-	}
+    /**
+     * Base query string without the declared parameters and without the entity name. Ex: "lastName == lastNameParam"
+     *
+     * CAREFUL: must not contain "order" clauses!
+     */
+    private String baseQuery;
 
-	public String getBaseQuery() {
-		return baseQuery;
-	}
+    /**
+     * (Optional)
+     * Declared parameters. Ex: "String lastNameParam"
+     */
+    private String declaredParameters;
 
-	public String getDeclaredParameters() {
-		return declaredParameters;
-	}
+    /**
+     * (Optional)
+     * List of parameters. Ex: Arrays.asList("Smith")
+     */
+    private List<Object> parameters;
 
-	public List<Object> getParameters() {
-		return parameters;
-	}
+    public GeocellQuery(String baseQuery, String declaredParameters,
+            List<Object> parameters) {
+        if(baseQuery == null || baseQuery.length() == 0) {
+            throw new IllegalArgumentException("Parameter 'baseQuery' must not be empty!");
+        }
+        this.baseQuery = baseQuery;
+        this.declaredParameters = declaredParameters;
+        this.parameters = parameters;
+    }
+
+    public String getBaseQuery() {
+        return baseQuery;
+    }
+
+    public String getDeclaredParameters() {
+        return declaredParameters;
+    }
+
+    public List<Object> getParameters() {
+        return parameters;
+    }
 
 }
