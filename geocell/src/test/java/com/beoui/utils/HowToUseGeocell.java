@@ -137,4 +137,5 @@ public class HowToUseGeocell extends TestCase {
             // We catch excption here because we have not configured the PersistentManager (and so the queries won't work)
         }
     }
+
 }

@@ -493,4 +493,5 @@ public final class GeocellUtils {
         Collections.sort(result, new DoubleTupleComparator());
         return result;
     }
+
 }

@@ -2,6 +2,8 @@ package com.beoui.geocell.model;
 
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
+
 /**
  * GeocellQuery splits the traditional query in 3 parts:
  * the base query string,
@@ -38,9 +40,7 @@ public class GeocellQuery {
 
     public GeocellQuery(String baseQuery, String declaredParameters,
             List<Object> parameters) {
-        if(baseQuery == null || baseQuery.length() == 0) {
-            throw new IllegalArgumentException("Parameter 'baseQuery' must not be empty!");
-        }
+        Validate.notEmpty(baseQuery);
         this.baseQuery = baseQuery;
         this.declaredParameters = declaredParameters;
         this.parameters = parameters;

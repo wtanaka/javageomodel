@@ -13,22 +13,21 @@ and limitations under the License.
 
 package com.beoui.geocell.model;
 
+import org.apache.commons.lang.Validate;
+
 /**
  *
  * @author Alexandre Gellibert <alexandre.gellibert@gmail.com>
  *
  */
 public class Point {
+
     private double lat;
     private double lon;
 
     public Point(double lat, double lon) {
-        if(lat > 90.0 || lat < -90.0) {
-            throw new IllegalArgumentException("Latitude must be in [-90, 90] but was " + lat);
-        }
-        if(lon > 180.0 || lon < -180.0) {
-            throw new IllegalArgumentException("Longitude must be in [-180, 180] but was " + lon);
-        }
+        Validate.isTrue(lat > 90.0 || lat < -90.0, "Latitude must be in [-90, 90] but was ", lat);
+        Validate.isTrue(lon > 180.0 || lon < -180.0, "Longitude must be in [-180, 180] but was ", lon);
         this.lat = lat;
         this.lon = lon;
     }
@@ -45,4 +44,5 @@ public class Point {
     public void setLon(double lon) {
         this.lon = lon;
     }
+
 }
