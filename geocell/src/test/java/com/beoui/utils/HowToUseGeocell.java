@@ -76,14 +76,14 @@ public class HowToUseGeocell extends TestCase {
      */
     public void testHowToQueryOnABoundingBox() {
         // Incoming data: latitude and longitude of south-west and north-east points (around Bordeaux for instance =) )
-        double latSW = 44.8;
-        double lonSW = -0.6;
-
-        double latNE = 44.9;
-        double lonNE = -0.7;
+        double latS = 44.8;
+        double latN = 44.9;
+        
+        double lonW = -0.6;
+        double lonE = -0.7;
 
         // Transform this to a bounding box
-        BoundingBox bb = new BoundingBox(latNE, lonNE, latSW, lonSW);
+        BoundingBox bb = new BoundingBox(latN, lonE, latS, lonW);
 
         // Calculate the geocells list to be used in the queries (optimize list of cells that complete the given bounding box)
         List<String> cells = GeocellManager.bestBboxSearchCells(bb, null);
@@ -113,7 +113,7 @@ public class HowToUseGeocell extends TestCase {
         Assert.assertTrue(cells2.size() > 0);
 
         // Show in the log what cells shoud be used in the query
-        log.log(Level.INFO, "Geocells to use in query for PointSW("+latSW+","+lonSW+") ; PointNE("+latNE+","+lonNE+") are: "+cells);
+        log.log(Level.INFO, "Geocells to use in query for PointSW("+latS+","+lonW+") ; PointNE("+latN+","+lonE+") are: "+cells);
     }
 
     /**
