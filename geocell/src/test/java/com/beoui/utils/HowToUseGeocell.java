@@ -91,7 +91,6 @@ public class HowToUseGeocell extends TestCase {
         // OR if you want to use a custom "cost function"
         List<String> cells2 = GeocellManager.bestBboxSearchCells(bb, new CostFunction() {
 
-            @Override
             public double defaultCostFunction(int numCells, int resolution) {
                 if(numCells > 100) {
                     return Double.MAX_VALUE;

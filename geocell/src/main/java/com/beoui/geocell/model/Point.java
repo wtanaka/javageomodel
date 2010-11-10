@@ -26,8 +26,8 @@ public class Point {
     private double lon;
 
     public Point(double lat, double lon) {
-        Validate.isTrue(lat > 90.0 || lat < -90.0, "Latitude must be in [-90, 90] but was ", lat);
-        Validate.isTrue(lon > 180.0 || lon < -180.0, "Longitude must be in [-180, 180] but was ", lon);
+    	Validate.isTrue(!(lat > 90.0 || lat < -90.0), "Latitude must be in [-90, 90]  but was ", lat);
+    	Validate.isTrue(!(lon > 180.0 || lon < -180.0), "Longitude must be in [-180, 180] but was ", lon);
         this.lat = lat;
         this.lon = lon;
     }
