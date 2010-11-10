@@ -37,10 +37,16 @@ public class GeocellQuery {
      * List of parameters. Ex: Arrays.asList("Smith")
      */
     private List<Object> parameters;
+    
+    // Use this constructor to build empty base queries.
+    public GeocellQuery() {
+    	this.baseQuery = null;
+        this.declaredParameters = null;
+        this.parameters = null;
+    }
 
     public GeocellQuery(String baseQuery, String declaredParameters,
             List<Object> parameters) {
-        Validate.notEmpty(baseQuery);
         this.baseQuery = baseQuery;
         this.declaredParameters = declaredParameters;
         this.parameters = parameters;
