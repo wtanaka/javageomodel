@@ -103,9 +103,8 @@ public class HowToUseGeocell extends TestCase {
         // Use this in a query
         // In Google App Engine, you'll have something like below. In hibernate (or whatever else), it might be a little bit different.
 //		String queryString = "select from ObjectToSave where geocellsParameter.contains(geocells)";
-//		Query query = pm.newQuery(query);
+//		Query query = pm.newQuery(queryString);
 //	    query.declareParameters("String geocellsParameter");
-//	    query.declareParameters("String geocellsP");
 //	    List<ObjectToSave> objects = (List<ObjectToSave>) query.execute(cells);
 
         // Just checking that cells are not empty
@@ -133,7 +132,7 @@ public class HowToUseGeocell extends TestCase {
             objects = GeocellManager.proximityFetch(center, 40, 0, ObjectToSave.class, baseQuery, pm);
             Assert.assertTrue(objects.size() > 0);
         } catch (Exception e) {
-            // We catch excption here because we have not configured the PersistentManager (and so the queries won't work)
+            // We catch exception here because we have not configured the PersistentManager (and so the queries won't work)
         }
     }
 
