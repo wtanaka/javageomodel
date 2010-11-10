@@ -446,14 +446,32 @@ public final class GeocellUtils {
      * @param p2: indicating the second point.
      * @return The 2D great-circle distance between the two given points, in meters.
      */
-    public static double distance(Point p1, Point p2) {
-        double p1lat = Math.toRadians(p1.getLat());
-        double p1lon = Math.toRadians(p1.getLon());
-        double p2lat = Math.toRadians(p2.getLat());
-        double p2lon = Math.toRadians(p2.getLon());
-        return RADIUS * Math.acos(Math.sin(p1lat) * Math.sin(p2lat) +
-                Math.cos(p1lat) * Math.cos(p2lat) * Math.cos(p2lon - p1lon));
-    }
+	public static double distance(Point p1, Point p2) {
+		double p1lat = Math.toRadians(p1.getLat());
+		double p1lon = Math.toRadians(p1.getLon());
+		double p2lat = Math.toRadians(p2.getLat());
+		double p2lon = Math.toRadians(p2.getLon());
+		return RADIUS
+				* Math.acos(makeDoubleInRange(Math.sin(p1lat) * Math.sin(p2lat)
+						+ Math.cos(p1lat) * Math.cos(p2lat)
+						* Math.cos(p2lon - p1lon)));
+	}
+
+	/**
+	 * This function is used to fix issue 10:
+	 * GeocellUtils.distance(...) uses Math.acos(arg) method. In some cases arg > 1 (i.e 1.0000000002), so acos cannot be calculated and the method returns NaN.
+	 * @param d
+	 * @return a double between -1 and 1
+	 */
+	public static double makeDoubleInRange(double d) {
+		double result = d;
+		if (d > 1) {
+			result = 1;
+		} else if (d < -1) {
+			result = -1;
+		}
+		return result;
+	}
 
     /**
      * Returns the edges of the rectangular region containing all of the
