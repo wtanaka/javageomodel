@@ -2,8 +2,6 @@ package com.beoui.geocell.model;
 
 import java.util.List;
 
-import org.apache.commons.lang.Validate;
-
 /**
  * GeocellQuery splits the traditional query in 3 parts:
  * the base query string,

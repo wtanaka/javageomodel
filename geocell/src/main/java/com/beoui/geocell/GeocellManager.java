@@ -217,7 +217,7 @@ public class GeocellManager {
      * @param maxDistance (optional) A number indicating the maximum distance to search, in meters. Set to 0 if no max distance is expected
      * @param entityClass class of the entity to search. MUST implement LocationCapable class because we use entity location and key, and also "GEOCELLS" columnn in query.
      * @param baseQuery query that will be enhanced by algorithm. see GeocellQuery class for more information.
-     * @param pm PersistentManager to be used to create new queries
+     * @param pm PersistenceManager to be used to create new queries
      * @param maxGeocellResolution the resolution (size of cell) when we start the algorithm. If you expect your search to run until big boxes (not many entities near the center), think about using a lower resolution for better performance. If you don't want to bother, use other method below without this parameter.
      * @return the list of entities found near the center and ordered by distance.
      *
@@ -227,7 +227,7 @@ public class GeocellManager {
     public static final <T extends LocationCapable> List<T> proximityFetch(Point center, int maxResults, double maxDistance, Class<T> entityClass, GeocellQuery baseQuery, PersistenceManager pm, int maxGeocellResolution) {
         List<LocationComparableTuple<T>> results = new ArrayList<LocationComparableTuple<T>>();
 
-        Validate.isTrue(maxGeocellResolution > MAX_GEOCELL_RESOLUTION,
+        Validate.isTrue(maxGeocellResolution < MAX_GEOCELL_RESOLUTION + 1,
                 "Invalid max resolution parameter. Must be inferior to ", MAX_GEOCELL_RESOLUTION);
 
         // The current search geocell containing the lat,lon.
@@ -267,9 +267,8 @@ public class GeocellManager {
             List<String> curGeocellsUnique = new ArrayList<String>(curTempUnique);
 
             // Run query on the next set of geocells.
-            //String and = baseQuery.getBaseQuery().toUpperCase().contains("WHERE") ? " && " : " ";
-            String and = baseQuery.getBaseQuery() != null || baseQuery.getBaseQuery().trim().length() == 0 ? " && " : " ";
-            Query query = pm.newQuery(entityClass, baseQuery.getBaseQuery() + and + "geocellsP.contains(geocells)");
+            String queryStart = baseQuery.getBaseQuery() == null || baseQuery.getBaseQuery().trim().length() == 0 ? " " : baseQuery.getBaseQuery() + " && ";
+            Query query = pm.newQuery(entityClass, queryStart + "geocells.contains(geocellsP)");
 
             if(baseQuery.getDeclaredParameters() == null || baseQuery.getDeclaredParameters().trim().length() == 0) {
                 query.declareParameters("String geocellsP");
