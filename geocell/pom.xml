@@ -4,7 +4,7 @@
   <artifactId>geocell</artifactId>
   <packaging>jar</packaging>
   <name>GeocellJava</name>
-  <version>0.0.4-SNAPSHOT</version>
+  <version>0.0.4</version>
   <url>http://code.google.com/p/javageomodel</url>
 
   <licenses>
@@ -15,7 +15,7 @@
   </licenses>
 
   <scm>
-  	<developerConnection>scm:svn:https://javageomodel.googlecode.com/svn/trunk/geocell/</developerConnection>
+  	<developerConnection>scm:svn:https://javageomodel.googlecode.com/svn/tags/geocell/geocell-0.0.4</developerConnection>
   </scm>
 
   <dependencies>
