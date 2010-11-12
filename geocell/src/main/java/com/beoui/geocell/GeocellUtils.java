@@ -402,7 +402,7 @@ public final class GeocellUtils {
      * @return Returns whether or not the given geocell string defines a valid geocell.
      */
     public static boolean isValid(String cell) {
-        if(cell == null) {
+        if(cell == null || cell.trim().length() == 0) {
             return false;
         }
         for(char c : cell.toCharArray()) {
