@@ -506,7 +506,7 @@ public final class GeocellUtils {
         List<Tuple<int[],Double>> result = new ArrayList<Tuple<int[],Double>>();
         result.add(new Tuple<int[], Double>(SOUTH, distance(new Point(maxSouth, point.getLon()), point)));
         result.add(new Tuple<int[], Double>(NORTH, distance(new Point(maxNorth, point.getLon()), point)));
-        result.add(new Tuple<int[], Double>(WEST, distance(new Point(point.getLat(), maxEast), point)));
+        result.add(new Tuple<int[], Double>(WEST, distance(new Point(point.getLat(), maxWest), point)));
         result.add(new Tuple<int[], Double>(EAST, distance(new Point(point.getLat(), maxEast), point)));
         Collections.sort(result, new DoubleTupleComparator());
         return result;
