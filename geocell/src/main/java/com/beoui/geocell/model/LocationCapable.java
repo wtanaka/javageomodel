@@ -11,6 +11,7 @@ import java.util.List;
  * @author Alexandre Gellibert
  *
  */
+@Deprecated
 public interface LocationCapable {
 
     /**
@@ -25,10 +26,6 @@ public interface LocationCapable {
      */
     String getKeyString();
 
-    /**
-     *
-     * @return the key of the entity used as a String
-     */
     List<String> getGeocells();
 
 }

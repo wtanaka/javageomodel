@@ -3,7 +3,6 @@ package com.beoui.geocell.comparator;
 import com.beoui.geocell.model.LocationCapable;
 import com.beoui.geocell.model.Tuple;
 
-
 /**
  * This class is used to merge lists of Tuple<T, Double>. Lists are sorted following Double value but are equals only if T.key (same entity) are equals.
  *
@@ -11,6 +10,7 @@ import com.beoui.geocell.model.Tuple;
  *
  * @param <T>
  */
+@Deprecated
 public class LocationComparableTuple<T extends LocationCapable> extends Tuple<T ,Double> implements Comparable<LocationComparableTuple<T>>{
 
     public LocationComparableTuple(T first, Double second) {

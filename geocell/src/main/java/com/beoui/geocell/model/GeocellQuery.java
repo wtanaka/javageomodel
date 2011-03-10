@@ -43,6 +43,18 @@ public class GeocellQuery {
         this.parameters = null;
     }
 
+    public GeocellQuery(String baseQuery) {
+        this.baseQuery = baseQuery;
+        this.declaredParameters = null;
+        this.parameters = null;
+    }
+
+    public GeocellQuery(String baseQuery, List<Object> parameters) {
+        this.baseQuery = baseQuery;
+        this.declaredParameters = null;
+        this.parameters = parameters;
+    }
+
     public GeocellQuery(String baseQuery, String declaredParameters,
             List<Object> parameters) {
         this.baseQuery = baseQuery;

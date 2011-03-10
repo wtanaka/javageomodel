@@ -70,12 +70,14 @@ public class ObjectToSave implements LocationCapable {
         this.geocells = geocells;
     }
 
-    public String getKeyString() {
-        return Long.valueOf(id).toString();
-    }
+	@Override
+	public Point getLocation() {
+		return new Point(longitude, latitude);
+	}
 
-    public Point getLocation() {
-        return new Point(latitude, longitude);
-    }
+	@Override
+	public String getKeyString() {
+		return Long.toString(id);
+	}
 
 }
