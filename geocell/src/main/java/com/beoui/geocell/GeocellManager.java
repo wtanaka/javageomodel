@@ -16,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
 import com.beoui.geocell.comparator.EntityLocationComparableTuple;
-import com.beoui.geocell.comparator.LocationComparableTuple;
 import com.beoui.geocell.model.BoundingBox;
 import com.beoui.geocell.model.CostFunction;
 import com.beoui.geocell.model.DefaultCostFunction;
@@ -135,7 +134,7 @@ public class GeocellManager {
      * Returns an efficient set of geocells to search in a bounding box query.
 
       This method is guaranteed to return a set of geocells having the same
-      resolution.
+      resolution (except in the case of antimeridian search i.e when east < west).
 
      * @param bbox: A geotypes.Box indicating the bounding box being searched.
      * @param costFunction: A function that accepts two arguments:
@@ -146,7 +145,14 @@ public class GeocellManager {
      * @return A list of geocell strings that contain the given box.
      */
     public static List<String> bestBboxSearchCells(BoundingBox bbox, CostFunction costFunction) {
-
+    	if(bbox.getEast() < bbox.getWest()) {
+    		BoundingBox bboxAntimeridian1 = new BoundingBox(bbox.getNorth(), bbox.getEast(), bbox.getSouth(), GeocellUtils.MIN_LONGITUDE);
+    		BoundingBox bboxAntimeridian2 = new BoundingBox(bbox.getNorth(), GeocellUtils.MAX_LONGITUDE, bbox.getSouth(), bbox.getWest());
+    		List<String> antimeridianList = bestBboxSearchCells(bboxAntimeridian1, costFunction);
+    		antimeridianList.addAll(bestBboxSearchCells(bboxAntimeridian2, costFunction));
+    		return antimeridianList;
+    	}
+    	
         String cellNE = GeocellUtils.compute(bbox.getNorthEast(), GeocellManager.MAX_GEOCELL_RESOLUTION);
         String cellSW = GeocellUtils.compute(bbox.getSouthWest(), GeocellManager.MAX_GEOCELL_RESOLUTION);
 
@@ -309,8 +315,18 @@ public class GeocellManager {
 	   return proximitySearch(center, maxResults, maxDistance, entityClass, baseQuery, queryEngine, maxGeocellResolution);
    }
 
-   public static final <T> List<T> proximitySearch(Point center, int maxResults, double maxDistance, Class<T> entityClass, GeocellQuery baseQuery, EntityManager em) {       JPAGeocellQueryEngine queryEngine = new JPAGeocellQueryEngine();
-   queryEngine.setEntityManager(em);
+   public static final <T> List<T> proximitySearch(Point center, int maxResults, double maxDistance, Class<T> entityClass, GeocellQuery baseQuery, PersistenceManager pm) {       
+       return proximitySearch(center, maxResults, maxDistance, entityClass, baseQuery, pm, MAX_GEOCELL_RESOLUTION);
+   }
+   
+   public static final <T> List<T> proximitySearch(Point center, int maxResults, double maxDistance, Class<T> entityClass, GeocellQuery baseQuery, PersistenceManager pm, int maxGeocellResolution) {       
+	   JDOGeocellQueryEngine queryEngine = new JDOGeocellQueryEngine();
+	   queryEngine.setPersistenceManager(pm);
+       return proximitySearch(center, maxResults, maxDistance, entityClass, baseQuery, queryEngine, maxGeocellResolution);
+   }
+
+   
+   public static final <T> List<T> proximitySearch(Point center, int maxResults, double maxDistance, Class<T> entityClass, GeocellQuery baseQuery, EntityManager em) {       
        return proximitySearch(center, maxResults, maxDistance, entityClass, baseQuery, em, MAX_GEOCELL_RESOLUTION);
    }
    

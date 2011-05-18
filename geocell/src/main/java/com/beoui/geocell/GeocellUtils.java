@@ -59,7 +59,11 @@ import com.beoui.geocell.model.Tuple;
  */
 public final class GeocellUtils {
 
-    // Geocell algorithm constants.
+    public static final float MIN_LONGITUDE = -180.0f;
+    public static final float MAX_LONGITUDE = 180.0f;
+    public static final float MIN_LATITUDE = -90.0f;
+    public static final float MAX_LATITUDE = 90.0f;
+	// Geocell algorithm constants.
     public static final int GEOCELL_GRID_SIZE = 4;
     private static final String GEOCELL_ALPHABET = "0123456789abcdef";
 
@@ -346,10 +350,10 @@ public final class GeocellUtils {
      * @return The geocell string containing the given point, of length resolution.
      */
     public static String compute(Point point, int resolution) {
-        float north = 90.0f;
-        float south = -90.0f;
-        float east = 180.0f;
-        float west = -180.0f;
+        float north = MAX_LATITUDE;
+        float south = MIN_LATITUDE;
+        float east = MAX_LONGITUDE;
+        float west = MIN_LONGITUDE;
 
         StringBuilder cell = new StringBuilder();
         while(cell.length() < resolution) {

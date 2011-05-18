@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
+import javax.persistence.EntityManager;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -120,7 +121,7 @@ public class HowToUseGeocell extends TestCase {
      *
      */
     // TODO configure persistent manager to run a real test
-    public void testHowToQueryWithProximitySearch() {
+    public void testHowToQueryWithProximitySearchWithJDO() {
         Point center = new Point(20.0, 12.4);
         PersistenceManager pm = null;// here put your persistent manager
         List<Object> params = new ArrayList<Object>();
@@ -129,11 +130,29 @@ public class HowToUseGeocell extends TestCase {
 
         List<ObjectToSave> objects = null;
         try {
-            objects = GeocellManager.proximityFetch(center, 40, 0, ObjectToSave.class, baseQuery, pm);
+            objects = GeocellManager.proximitySearch(center, 40, 0, ObjectToSave.class, baseQuery, pm);
             Assert.assertTrue(objects.size() > 0);
         } catch (Exception e) {
             // We catch exception here because we have not configured the PersistentManager (and so the queries won't work)
         }
     }
+    
+    // TODO configure persistent manager to run a real test
+    public void testHowToQueryWithProximitySearchWithJPA() {
+        Point center = new Point(20.0, 12.4);
+        EntityManager em = null;// here put your persistent manager
+        List<Object> params = new ArrayList<Object>();
+        params.add("John");
+        GeocellQuery baseQuery = new GeocellQuery("lastName == lastNameParam", "String lastNameParam", params);
+
+        List<ObjectToSave> objects = null;
+        try {
+            objects = GeocellManager.proximitySearch(center, 40, 0, ObjectToSave.class, baseQuery, em);
+            Assert.assertTrue(objects.size() > 0);
+        } catch (Exception e) {
+            // We catch exception here because we have not configured the PersistentManager (and so the queries won't work)
+        }
+    }
+
 
 }

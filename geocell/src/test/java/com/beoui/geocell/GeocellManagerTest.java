@@ -1,10 +1,20 @@
 package com.beoui.geocell;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.anyVararg;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -16,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.beoui.geocell.model.BoundingBox;
 import com.beoui.geocell.model.GeocellQuery;
 import com.beoui.geocell.model.Point;
 import com.beoui.utils.JPAEntity;
@@ -42,7 +53,7 @@ public class GeocellManagerTest {
 		when(persistenceManager.newQuery(ObjectToSave.class, " geocells.contains(geocellsP)")).thenReturn(jdoQuery);
 		when(jdoQuery.execute(any())).thenReturn(queryResults);
 
-		List<ObjectToSave> results = GeocellManager.proximityFetch(center, 1, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
+		List<ObjectToSave> results = GeocellManager.proximitySearch(center, 1, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
 
 		verify(jdoQuery).declareParameters("String geocellsP");
 		assertNotNull(results);
@@ -58,7 +69,7 @@ public class GeocellManagerTest {
 		when(persistenceManager.newQuery(ObjectToSave.class, "baseQuery && geocells.contains(geocellsP)")).thenReturn(jdoQuery);
 		when(jdoQuery.executeWithArray(anyVararg())).thenReturn(queryResults);
 
-		List<ObjectToSave> results = GeocellManager.proximityFetch(center, 1, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
+		List<ObjectToSave> results = GeocellManager.proximitySearch(center, 1, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
 
 		verify(jdoQuery).declareParameters("declaredParameters, String geocellsP");
 		assertNotNull(results);
@@ -78,7 +89,7 @@ public class GeocellManagerTest {
         when(persistenceManager.newQuery(ObjectToSave.class, "baseQuery && geocells.contains(geocellsP)")).thenReturn(jdoQuery);
         when(jdoQuery.executeWithArray(anyVararg())).thenReturn(queryResults);
 
-        List<ObjectToSave> results = GeocellManager.proximityFetch(center, 1, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
+        List<ObjectToSave> results = GeocellManager.proximitySearch(center, 1, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
 
         verify(jdoQuery).declareParameters("declaredParameters, String geocellsP");
         assertNotNull(results);
@@ -105,7 +116,7 @@ public class GeocellManagerTest {
         when(persistenceManager.newQuery(ObjectToSave.class, "baseQuery && geocells.contains(geocellsP)")).thenReturn(jdoQuery);
         when(jdoQuery.executeWithArray(anyVararg())).thenReturn(queryResults1).thenReturn(queryResults2);
 
-        List<ObjectToSave> results = GeocellManager.proximityFetch(center, 2, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
+        List<ObjectToSave> results = GeocellManager.proximitySearch(center, 2, 10.0, ObjectToSave.class, baseQuery, persistenceManager, 1);
 
         verify(jdoQuery, times(2)).declareParameters("declaredParameters, String geocellsP");
         assertNotNull(results);
@@ -217,5 +228,22 @@ public class GeocellManagerTest {
 		verify(entityManager).createQuery("SELECT e FROM JPAEntity where e.keyString = ?1 and geoCellsData in ('3','9')");
 		verify(jpaQuery, times(3)).setParameter(1, "testKeyString");
     }
+	
+	@Test
+	public void testBestBoxSearchOnAntimeridian() {
+		float east = 64.576263f;
+		float west = 87.076263f;
+		float north = 76.043611f;
+		float south = -54.505934f;
+		Set<String> antimeridianSearch = new HashSet<String>(GeocellManager.bestBboxSearchCells(new BoundingBox(north,east,south,west), null));
+		
+		List<String> equivalentSearchPart1 = GeocellManager.bestBboxSearchCells(new BoundingBox(north,east,south,-180.0f), null);
+		List<String> equivalentSearchPart2 = GeocellManager.bestBboxSearchCells(new BoundingBox(north,180.0f,south,west), null);
+		Set<String> equivalentSearch = new HashSet<String>();
+		equivalentSearch.addAll(equivalentSearchPart1);
+		equivalentSearch.addAll(equivalentSearchPart2);
+		
+		assertEquals(equivalentSearch, antimeridianSearch);
+	}
 
 }
