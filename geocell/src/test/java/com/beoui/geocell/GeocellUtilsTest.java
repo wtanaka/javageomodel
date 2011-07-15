@@ -1,6 +1,9 @@
 package com.beoui.geocell;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -14,7 +17,7 @@ import com.beoui.utils.JPAEntity;
 public class GeocellUtilsTest {
 
 	private static final String TEST_KEY_STRING = "ID";
-	private Point point = new Point(37, -122);
+	private final Point point = new Point(37, -122);
 	
 	public static class JPAEntitySubclass extends JPAEntity {
 		
@@ -114,5 +117,11 @@ public class GeocellUtilsTest {
 
 		double distance = GeocellUtils.distance(p1, p2);
 		assertEquals(2889677.0, distance, 1.0);
+	}
+	
+	@Test
+	public void testInterpolationForEdgeCase() {
+		
+		assertTrue(GeocellUtils.interpolationCount("8e6f727a6b0dd", "8e1d5c3ce9aff") > 0);
 	}
 }

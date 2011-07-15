@@ -195,10 +195,14 @@ public final class GeocellUtils {
         double cellLatSpan = bboxSW.getNorth() - bboxSW.getSouth();
         double cellLonSpan = bboxSW.getEast() - bboxSW.getWest();
 
-        int numCols = (int)((bboxNE.getEast() - bboxSW.getWest()) / cellLonSpan);
-        int numRows = (int)((bboxNE.getNorth() - bboxSW.getSouth()) / cellLatSpan);
+        double numCols = ((bboxNE.getEast() - bboxSW.getWest()) / cellLonSpan);
+        double numRows = ((bboxNE.getNorth() - bboxSW.getSouth()) / cellLatSpan);
 
-        return numCols * numRows;
+        double totalCols = numCols * numRows * 1.0;
+        if(totalCols > Integer.MAX_VALUE) {
+        	return Integer.MAX_VALUE;
+        }
+        return (int)totalCols;
     }
 
     /**

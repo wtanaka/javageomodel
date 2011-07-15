@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.beoui.geocell.model.BoundingBox;
+import com.beoui.geocell.model.CostFunction;
 import com.beoui.geocell.model.GeocellQuery;
 import com.beoui.geocell.model.Point;
 import com.beoui.utils.JPAEntity;
@@ -245,5 +246,42 @@ public class GeocellManagerTest {
 		
 		assertEquals(equivalentSearch, antimeridianSearch);
 	}
+	
+	@Test
+	public void testBestBoxWithCustomCostFunction() {
+		final int numCellsMax = 30;
+		BoundingBox bb = new BoundingBox(38.912056, -118.40747, 35.263195, -123.88965);
 
+		List<String> cells = GeocellManager.bestBboxSearchCells(bb, new CostFunction() {
+
+		@Override
+
+		public double defaultCostFunction(int numCells, int resolution)
+
+		{
+		// Here we ensure that we do not try to query more than 30 cells, the limit of a gae IN filter
+		return numCells > numCellsMax ? Double.MAX_VALUE : 0;
+		}
+
+		});
+		
+		assertTrue(cells != null);
+		assertTrue(cells.size() > 0);
+		assertTrue(cells.size() <= numCellsMax);
+	}
+	
+	/**
+	 * This is to test there is not Null pointer sent (see issue 23)
+	 */
+	@Test
+	public void testEmptyBaseQuerySearch() {
+		List<Object> parameters = new ArrayList<Object>();
+		parameters.add("testKeyString");
+
+		GeocellQuery baseQuery = new GeocellQuery();
+
+		when(entityManager.createQuery(anyString())).thenReturn(jpaQuery);
+		when(jpaQuery.getResultList()).thenReturn(new ArrayList<ObjectToSave>());
+		GeocellManager.proximitySearch(center, 10, 10.0, JPAEntity.class, baseQuery, entityManager, 1);
+	}
 }
