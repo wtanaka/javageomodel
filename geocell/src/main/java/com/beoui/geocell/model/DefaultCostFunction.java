@@ -18,7 +18,7 @@ import com.beoui.geocell.GeocellUtils;
 /**
  * Default cost function used if no cost function is specified in Geocell.bestBboxSearchCells method.
  * 
- * @author Alexandre Gellibert <alexandre.gellibert@gmail.com>
+ * @author Alexandre Gellibert
  *
  */
 public class DefaultCostFunction implements CostFunction {

@@ -33,7 +33,7 @@ import com.beoui.geocell.model.Point;
 /**
  * Unit test also used to explain how to use Geocell class.
  *
- * @author Alexandre Gellibert <alexandre.gellibert@gmail.com>
+ * @author Alexandre Gellibert
  *
  */
 public class HowToUseGeocell extends TestCase {

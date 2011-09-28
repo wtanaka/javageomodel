@@ -15,7 +15,7 @@ package com.beoui.geocell.model;
 
 /**
  *
- * @author Alexandre Gellibert <alexandre.gellibert@gmail.com>
+ * @author Alexandre Gellibert
  *
  */
 public class BoundingBox {

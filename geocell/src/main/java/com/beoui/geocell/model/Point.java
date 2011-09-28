@@ -17,7 +17,7 @@ import org.apache.commons.lang.Validate;
 
 /**
  *
- * @author Alexandre Gellibert <alexandre.gellibert@gmail.com>
+ * @author Alexandre Gellibert
  *
  */
 public class Point {

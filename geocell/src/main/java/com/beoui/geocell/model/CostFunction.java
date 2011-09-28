@@ -19,7 +19,7 @@ package com.beoui.geocell.model;
  * When the cost is going higher, the algorithm stops.
  * The cost depends on application use of geocells.
  *
- * @author Alexandre Gellibert <alexandre.gellibert@gmail.com>
+ * @author Alexandre Gellibert
  *
  */
 public interface CostFunction {
