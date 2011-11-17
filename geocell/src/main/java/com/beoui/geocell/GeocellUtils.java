@@ -582,9 +582,17 @@ public final class GeocellUtils {
 	        location.setLat(getField(entity.getClass(), Latitude.class).getDouble(entity));
 	    	location.setLon(getField(entity.getClass(), Longitude.class).getDouble(entity));
         } catch (IllegalArgumentException e1) {
-	        // TODO Auto-generated catch block
-	        e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
+			try {
+				location.setLat((Double) getField(entity.getClass(), Latitude.class).get(entity));
+				location.setLon((Double) getField(entity.getClass(), Longitude.class).get(entity));
+			} catch (IllegalArgumentException e2) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IllegalAccessException e2) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} catch (IllegalAccessException e1) {
 	        // TODO Auto-generated catch block
 	        e1.printStackTrace();
         }
